@@ -18,6 +18,8 @@
       --danger-bg: #FEE2E2;
       --success: #16A34A;
       --success-bg: #DCFCE7;
+      --warning: #D97706;
+      --warning-bg: #FEF3C7;
     }
 
     * {
@@ -35,7 +37,6 @@
       flex-direction: column;
     }
 
-    /* Header */
     header {
       background-color: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -65,13 +66,11 @@
       color: white;
       font-weight: 800;
       font-size: 1.2rem;
-      letter-spacing: -1px;
     }
 
     .brand-text h1 {
       font-size: 1.1rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
       color: var(--primary);
       text-transform: uppercase;
     }
@@ -119,7 +118,6 @@
       color: var(--text-muted);
     }
 
-    /* Container Principal */
     main {
       flex: 1;
       padding: 24px 16px;
@@ -128,7 +126,7 @@
       width: 100%;
     }
 
-    /* Tela de Login */
+    /* Login */
     .login-container {
       max-width: 850px;
       margin: 40px auto;
@@ -170,9 +168,6 @@
     .auth-card h3 {
       font-size: 1.2rem;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .auth-card p {
@@ -222,7 +217,7 @@
       background-color: var(--primary-hover);
     }
 
-    /* Telas dos Painéis */
+    /* Telas */
     .view-panel {
       display: none;
     }
@@ -231,22 +226,22 @@
       display: block;
     }
 
-    /* Painel dos Pais */
-    .parent-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-    }
-
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      margin-bottom: 20px;
     }
 
-    /* Carteirinha */
+    /* Layout Painel dos Pais */
+    .parent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
     .student-badge {
       display: flex;
       gap: 16px;
@@ -298,7 +293,6 @@
       margin-top: 4px;
     }
 
-    /* Limites & Categorias */
     .budget-bar-container {
       margin-top: 10px;
     }
@@ -320,7 +314,7 @@
     .progress-fill {
       background-color: var(--primary);
       height: 100%;
-      width: 58%;
+      width: 62%;
     }
 
     .category-breakdown {
@@ -339,7 +333,7 @@
       border-radius: 6px;
     }
 
-    /* Bloqueios */
+    /* Switches */
     .block-list {
       display: flex;
       flex-direction: column;
@@ -398,31 +392,75 @@
       transform: translateX(20px);
     }
 
-    /* Histórico */
+    /* Timeline de Status no Feed */
     .history-feed {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       margin-top: 12px;
-      max-height: 260px;
+      max-height: 380px;
       overflow-y: auto;
     }
 
     .feed-item {
-      padding: 10px 12px;
-      border-left: 3px solid var(--primary);
+      padding: 12px;
+      border-left: 4px solid var(--primary);
       background: #F9FAFB;
-      border-radius: 0 6px 6px 0;
+      border-radius: 0 8px 8px 0;
       font-size: 0.85rem;
     }
 
-    .feed-item small {
-      color: var(--text-muted);
-      display: block;
-      font-size: 0.75rem;
+    .order-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.7rem;
+      font-weight: 600;
     }
 
-    /* PDV Cantina */
+    .step-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .step-active {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .step-pending {
+      color: var(--text-muted);
+    }
+
+    /* PDV & Cantina */
+    .pos-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .pos-tab-btn {
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .pos-tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
     .pos-grid {
       display: grid;
       grid-template-columns: 1fr 320px;
@@ -440,10 +478,10 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px;
-      text-align: center;
+      overflow: hidden;
       cursor: pointer;
       transition: all 0.2s;
+      text-align: left;
     }
 
     .product-card:hover {
@@ -451,15 +489,31 @@
       transform: translateY(-2px);
     }
 
-    .product-card h4 {
-      font-size: 0.95rem;
-      margin: 8px 0 4px;
+    .product-img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
     }
 
-    .product-card .price {
+    .product-details {
+      padding: 10px;
+    }
+
+    .product-details h4 {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .product-details .price {
       color: var(--primary);
       font-weight: 700;
       font-size: 0.9rem;
+    }
+
+    .product-stock {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
 
     .order-sidebar {
@@ -470,6 +524,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      height: fit-content;
     }
 
     .blocked-warning {
@@ -484,6 +539,63 @@
       display: none;
     }
 
+    /* Painel de Gestão e Economia da Cantina */
+    .finance-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .metric-card {
+      background: #F9FAFB;
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .metric-card span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .metric-card h3 {
+      font-size: 1.4rem;
+      margin-top: 4px;
+      color: var(--text);
+    }
+
+    .stock-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    .stock-table th, .stock-table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stock-tag {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .tag-ok {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .tag-alert {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
     @media (max-width: 768px) {
       .pos-grid {
         grid-template-columns: 1fr;
@@ -493,7 +605,6 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <div class="brand">
       <div class="brand-icon">CX</div>
@@ -512,7 +623,7 @@
   </header>
 
   <main>
-    <!-- 1. TELA DE LOGIN -->
+    <!-- LOGIN -->
     <section id="viewLogin" class="view-panel active-view">
       <div class="login-container">
         <div class="login-title">
@@ -521,13 +632,13 @@
         </div>
 
         <div class="login-cards">
-          <!-- Login Responsáveis -->
+          <!-- Responsável -->
           <div class="auth-card">
             <div>
               <h3>👨‍👩‍👦 Portal do Responsável</h3>
-              <p>Acompanhe extrato, saldo, limites e bloqueio de consumo dos seus dependentes.</p>
+              <p>Monitore saldo, produtos bloqueados, extrato e status de entrega do aluno.</p>
               <div class="form-group">
-                <label>CPF ou Identificador do Responsável</label>
+                <label>CPF ou Identificador</label>
                 <input type="text" id="parentCpfInput" class="form-control" placeholder="Digite seu CPF">
               </div>
               <div class="form-group">
@@ -538,11 +649,11 @@
             <button class="btn-primary" onclick="acessarPainel('parent')">Entrar como Responsável</button>
           </div>
 
-          <!-- Login Cantina -->
+          <!-- Cantina -->
           <div class="auth-card">
             <div>
-              <h3>☕ Terminal da Cantina</h3>
-              <p>Interface de caixa rápida para consulta de matrícula, débito direto e conferência.</p>
+              <h3>☕ Terminal & Gestão da Cantina</h3>
+              <p>Operação rápida de caixa, gestão de lucro, faturamento e controle de estoque.</p>
               <div class="form-group">
                 <label>Operador / Código Caixa</label>
                 <input type="text" id="posCodeInput" class="form-control" placeholder="Ex: CAIXA-01">
@@ -552,16 +663,16 @@
                 <input type="password" id="posPassInput" class="form-control" placeholder="Chave de segurança">
               </div>
             </div>
-            <button class="btn-primary" onclick="acessarPainel('pos')">Acessar Terminal PDV</button>
+            <button class="btn-primary" onclick="acessarPainel('pos')">Acessar Sistema Cantina</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. PAINEL DO RESPONSÁVEL -->
+    <!-- PAINEL DOS PAIS -->
     <section id="viewParent" class="view-panel">
       <div class="parent-grid">
-        <!-- Coluna Esquerda: Carteirinha -->
+        <!-- Carteirinha -->
         <div class="card">
           <div class="student-badge">
             <div class="student-avatar">🎓</div>
@@ -598,24 +709,24 @@
               <strong>R$ 38,00</strong>
             </div>
             <div class="category-item">
-              <span>🍫 Doces & Sobremesas</span>
+              <span>🍫 Doces & Snacks</span>
               <strong>R$ 21,00</strong>
             </div>
           </div>
         </div>
 
-        <!-- Coluna Central: Bloqueio Parental -->
+        <!-- Bloqueio Parental -->
         <div class="card">
-          <h3>🚫 Controle & Bloqueio Parental</h3>
+          <h3>🚫 Bloqueio Parental</h3>
           <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
-            Itens marcados são bloqueados imediatamente no PDV da cantina escolar.
+            Itens desativados são barrados na hora no balcão da cantina.
           </p>
 
           <div class="block-list">
             <div class="block-item">
               <div>
                 <strong>Refrigerante (Lata)</strong>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Bebidas com alto teor de açúcar</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Bebidas gaseificadas com alto teor de açúcar</p>
               </div>
               <label class="switch">
                 <input type="checkbox" id="blockRefrigerante" checked onchange="toggleBlock('Refrigerante', this.checked)">
@@ -626,7 +737,7 @@
             <div class="block-item">
               <div>
                 <strong>Energético 250ml</strong>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Bebidas estimulantes</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Bebidas energéticas e estimulantes</p>
               </div>
               <label class="switch">
                 <input type="checkbox" id="blockEnergetico" checked onchange="toggleBlock('Energetico', this.checked)">
@@ -647,101 +758,149 @@
           </div>
         </div>
 
-        <!-- Coluna Direita: Histórico -->
+        <!-- Extrato & Timeline de Entrega -->
         <div class="card">
-          <h3>🔔 Extrato de Consumo</h3>
+          <h3>🔔 Extrato & Status de Entrega</h3>
           <div class="history-feed" id="historyFeed">
             <div class="feed-item">
-              <strong>Coxinha de Frango — R$ 7,00</strong>
-              <small>Hoje às 10:15 • Retirado no Balcão</small>
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Coxinha de Frango</strong>
+                <span style="font-weight: 700; color: var(--primary);">R$ 7,00</span>
+              </div>
+              <small>Hoje às 10:15 • Pedido #842</small>
+              <div class="order-stepper">
+                <span class="step-badge step-active">✓ Preparado</span>
+                <span class="step-badge step-active">✓ No Balcão</span>
+                <span class="step-badge step-active">✓ Retirado</span>
+              </div>
             </div>
+
             <div class="feed-item">
-              <strong>Suco Natural Laranja — R$ 6,00</strong>
-              <small>Ontem às 15:40 • Retirado no Balcão</small>
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Suco Natural de Laranja</strong>
+                <span style="font-weight: 700; color: var(--primary);">R$ 6,00</span>
+              </div>
+              <small>Ontem às 15:40 • Pedido #831</small>
+              <div class="order-stepper">
+                <span class="step-badge step-active">✓ Preparado</span>
+                <span class="step-badge step-active">✓ No Balcão</span>
+                <span class="step-badge step-active">✓ Retirado</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. TERMINAL DA CANTINA (PDV) -->
+    <!-- PAINEL DA CANTINA (PDV + GESTÃO) -->
     <section id="viewPOS" class="view-panel">
-      <div class="pos-grid">
-        <div class="card">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3>Catálogo de Produtos</h3>
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Terminal: <strong id="loggedPosBadge">Balcão</strong></span>
+      <!-- Abas da Cantina -->
+      <div class="pos-tabs">
+        <button class="pos-tab-btn active" id="tabBtnPDV" onclick="switchCantinaTab('pdv')">Caixa Balcão (PDV)</button>
+        <button class="pos-tab-btn" id="tabBtnGestao" onclick="switchCantinaTab('gestao')">Gestão Financeira & Estoque</button>
+      </div>
+
+      <!-- ABA 1: PDV -->
+      <div id="subViewPDV">
+        <div class="pos-grid">
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3>Catálogo de Produtos</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Aluno: <strong>João Pedro (202612113)</strong></span>
+            </div>
+
+            <div class="menu-cards" id="productsCatalogContainer">
+              <!-- Renderizado via JavaScript com fotos reais -->
+            </div>
           </div>
 
-          <div class="menu-cards">
-            <div class="product-card" onclick="adicionarItem('Coxinha de Frango', 7.00, 'Salgado')">
-              <span style="font-size: 2rem;">🥐</span>
-              <h4>Coxinha de Frango</h4>
-              <span class="price">R$ 7,00</span>
+          <!-- Sidebar Caixa -->
+          <div class="order-sidebar">
+            <div>
+              <h3>Comanda do Caixa</h3>
+              <div style="margin-top: 14px; font-size: 0.85rem;">
+                <p>Aluno: <strong>João Pedro</strong></p>
+                <p style="margin-top: 4px;">Saldo: <strong id="posBalanceDisplay">R$ 93,00</strong></p>
+                <p style="margin-top: 6px; color: var(--text-muted);" id="cartStatus">Nenhum item selecionado</p>
+              </div>
+
+              <div class="blocked-warning" id="blockedAlert">
+                ⚠️ PRODUTO BLOQUEADO<br>
+                <span style="font-weight: 400; font-size: 0.75rem;">O responsável bloqueou este produto no aplicativo.</span>
+              </div>
             </div>
 
-            <div class="product-card" onclick="adicionarItem('Pão de Queijo', 5.00, 'Salgado')">
-              <span style="font-size: 2rem;">🧀</span>
-              <h4>Pão de Queijo</h4>
-              <span class="price">R$ 5,00</span>
-            </div>
-
-            <div class="product-card" onclick="adicionarItem('Suco Natural Laranja', 6.00, 'Bebida')">
-              <span style="font-size: 2rem;">🧃</span>
-              <h4>Suco Natural 400ml</h4>
-              <span class="price">R$ 6,00</span>
-            </div>
-
-            <div class="product-card" onclick="adicionarItem('Refrigerante Lata', 6.50, 'Refrigerante')">
-              <span style="font-size: 2rem;">🥤</span>
-              <h4>Refrigerante Lata</h4>
-              <span class="price">R$ 6,50</span>
-            </div>
-
-            <div class="product-card" onclick="adicionarItem('Energético 250ml', 12.00, 'Energetico')">
-              <span style="font-size: 2rem;">⚡</span>
-              <h4>Energético 250ml</h4>
-              <span class="price">R$ 12,00</span>
-            </div>
-
-            <div class="product-card" onclick="adicionarItem('Barra de Chocolate', 5.00, 'Doces')">
-              <span style="font-size: 2rem;">🍫</span>
-              <h4>Barra de Chocolate</h4>
-              <span class="price">R$ 5,00</span>
+            <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 20px;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 12px;">
+                <span>Total:</span>
+                <span id="cartTotal">R$ 0,00</span>
+              </div>
+              <button class="btn-primary" id="btnDebitar" disabled onclick="concluirDebito()">Confirmar Débito</button>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Sidebar Caixa -->
-        <div class="order-sidebar">
-          <div>
-            <h3>Comanda do Caixa</h3>
-            <div style="margin-top: 14px; font-size: 0.85rem;">
-              <p>Aluno: <strong>João Pedro (202612113)</strong></p>
-              <p style="margin-top: 4px;">Saldo: <strong id="posBalanceDisplay">R$ 93,00</strong></p>
-              <p style="margin-top: 4px; color: var(--text-muted);" id="cartStatus">Nenhum item selecionado</p>
-            </div>
+      <!-- ABA 2: GESTÃO & ESTOQUE -->
+      <div id="subViewGestao" style="display: none;">
+        <div class="finance-metrics">
+          <div class="metric-card">
+            <span>Faturamento Bruto (Mês)</span>
+            <h3 id="metricFaturamento">R$ 9.420,00</h3>
+            <small style="color: var(--success); font-size: 0.75rem;">↑ 14% em relação ao mês anterior</small>
+          </div>
+          <div class="metric-card">
+            <span>Custo dos Produtos (CMV)</span>
+            <h3>R$ 3.860,00</h3>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">Insumos, fornecedores e embalagens</small>
+          </div>
+          <div class="metric-card">
+            <span>Lucro Líquido Real</span>
+            <h3 style="color: var(--primary);">R$ 5.560,00</h3>
+            <small style="color: var(--primary); font-size: 0.75rem;">Margem operacional de 59%</small>
+          </div>
+        </div>
 
-            <div class="blocked-warning" id="blockedAlert">
-              ⚠️ PRODUTO BLOQUEADO<br>
-              <span style="font-weight: 400; font-size: 0.75rem;">O responsável restringiu a compra deste produto.</span>
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3>Controle de Estoque em Tempo Real</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Estoque decrementado a cada venda confirmada no PDV.</p>
             </div>
+            <span class="status-badge">Inventário Ativo</span>
           </div>
 
-          <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 12px;">
-              <span>Total:</span>
-              <span id="cartTotal">R$ 0,00</span>
-            </div>
-            <button class="btn-primary" id="btnDebitar" disabled onclick="concluirDebito()">Confirmar Débito</button>
-          </div>
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Custo Unit.</th>
+                <th>Preço Venda</th>
+                <th>Estoque Atual</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="stockTableBody">
+              <!-- Renderizado dinamicamente -->
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
   </main>
 
   <script>
-    // Recupera dados gravados ou usa o padrão
+    // Catálogo de Produtos com fotos reais e estoque
+    const PRODUTOS = [
+      { id: 1, nome: 'Coxinha de Frango', preco: 7.00, custo: 2.80, cat: 'Salgado', estoque: 18, img: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=400&q=80' },
+      { id: 2, nome: 'Pão de Queijo', preco: 5.00, custo: 1.80, cat: 'Salgado', estoque: 24, img: 'https://images.unsplash.com/photo-1598142981504-7164b150c766?auto=format&fit=crop&w=400&q=80' },
+      { id: 3, nome: 'Suco Natural Laranja 400ml', preco: 6.00, custo: 2.00, cat: 'Bebida', estoque: 12, img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=400&q=80' },
+      { id: 4, nome: 'Refrigerante Lata 350ml', preco: 6.50, custo: 3.20, cat: 'Refrigerante', estoque: 30, img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=400&q=80' },
+      { id: 5, nome: 'Energético 250ml', preco: 12.00, custo: 6.00, cat: 'Energetico', estoque: 8, img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=400&q=80' },
+      { id: 6, nome: 'Barra de Chocolate', preco: 5.00, custo: 2.20, cat: 'Doces', estoque: 15, img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=400&q=80' }
+    ];
+
     let saldo = parseFloat(localStorage.getItem('cantinex_saldo')) || 93.00;
     let itemSelecionado = null;
     let bloqueios = JSON.parse(localStorage.getItem('cantinex_bloqueios')) || {
@@ -750,13 +909,49 @@
       'Doces': false
     };
 
-    // Aplica estado dos switches ao carregar
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('blockRefrigerante').checked = bloqueios['Refrigerante'];
       document.getElementById('blockEnergetico').checked = bloqueios['Energetico'];
       document.getElementById('blockDoces').checked = bloqueios['Doces'];
       atualizarExibicaoSaldo();
+      renderizarCatalogo();
+      renderizarTabelaEstoque();
     });
+
+    function renderizarCatalogo() {
+      const container = document.getElementById('productsCatalogContainer');
+      container.innerHTML = PRODUTOS.map(p => `
+        <div class="product-card" onclick="adicionarItem('${p.nome}', ${p.preco}, '${p.cat}', ${p.id})">
+          <img src="${p.img}" alt="${p.nome}" class="product-img">
+          <div class="product-details">
+            <h4>${p.nome}</h4>
+            <div class="price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+            <div class="product-stock">Estoque: ${p.estoque} un</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderizarTabelaEstoque() {
+      const tbody = document.getElementById('stockTableBody');
+      tbody.innerHTML = PRODUTOS.map(p => {
+        const isAlert = p.estoque <= 10;
+        return `
+          <tr>
+            <td><strong>${p.nome}</strong></td>
+            <td>${p.cat}</td>
+            <td>R$ ${p.custo.toFixed(2).replace('.', ',')}</td>
+            <td>R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
+            <td><strong>${p.estoque} un</strong></td>
+            <td>
+              <span class="stock-tag ${isAlert ? 'tag-alert' : 'tag-ok'}">
+                ${isAlert ? 'Reposição Necessária' : 'Normal'}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
 
     function acessarPainel(tipo) {
       document.getElementById('viewLogin').classList.remove('active-view');
@@ -770,8 +965,21 @@
       } else {
         const caixa = document.getElementById('posCodeInput').value.trim() || 'Balcão 01';
         localStorage.setItem('cantinex_pos_user', caixa);
-        document.getElementById('loggedPosBadge').innerText = caixa;
         document.getElementById('viewPOS').classList.add('active-view');
+      }
+    }
+
+    function switchCantinaTab(tab) {
+      if (tab === 'pdv') {
+        document.getElementById('subViewPDV').style.display = 'block';
+        document.getElementById('subViewGestao').style.display = 'none';
+        document.getElementById('tabBtnPDV').classList.add('active');
+        document.getElementById('tabBtnGestao').classList.remove('active');
+      } else {
+        document.getElementById('subViewPDV').style.display = 'none';
+        document.getElementById('subViewGestao').style.display = 'block';
+        document.getElementById('tabBtnPDV').classList.remove('active');
+        document.getElementById('tabBtnGestao').classList.add('active');
       }
     }
 
@@ -787,7 +995,7 @@
       localStorage.setItem('cantinex_bloqueios', JSON.stringify(bloqueios));
     }
 
-    function adicionarItem(nome, preco, categoria) {
+    function adicionarItem(nome, preco, categoria, id) {
       const alerta = document.getElementById('blockedAlert');
       const btnDebitar = document.getElementById('btnDebitar');
 
@@ -802,7 +1010,7 @@
       }
 
       alerta.style.display = 'none';
-      itemSelecionado = { nome, preco };
+      itemSelecionado = { id, nome, preco };
       document.getElementById('cartStatus').innerText = `${nome} selecionado`;
       document.getElementById('cartTotal').innerText = `R$ ${preco.toFixed(2).replace('.', ',')}`;
       btnDebitar.disabled = false;
@@ -818,9 +1026,35 @@
 
       saldo -= itemSelecionado.preco;
       localStorage.setItem('cantinex_saldo', saldo);
-      atualizarTelas(itemSelecionado.nome, itemSelecionado.preco);
+
+      // Decrementa o estoque
+      const prod = PRODUTOS.find(p => p.id === itemSelecionado.id);
+      if (prod && prod.estoque > 0) prod.estoque--;
+
+      atualizarExibicaoSaldo();
+      renderizarCatalogo();
+      renderizarTabelaEstoque();
+
+      // Adiciona ao extrato dos pais com o fluxo de entrega completo
+      const feed = document.getElementById('historyFeed');
+      const novoItem = document.createElement('div');
+      novoItem.className = 'feed-item';
+      novoItem.innerHTML = `
+        <div style="display: flex; justify-content: space-between;">
+          <strong>${itemSelecionado.nome}</strong>
+          <span style="font-weight: 700; color: var(--primary);">R$ ${itemSelecionado.preco.toFixed(2).replace('.', ',')}</span>
+        </div>
+        <small>Agora mesmo • Pedido #${Math.floor(100 + Math.random() * 900)}</small>
+        <div class="order-stepper">
+          <span class="step-badge step-active">✓ Preparado</span>
+          <span class="step-badge step-active">✓ No Balcão</span>
+          <span class="step-badge step-active">✓ Retirado</span>
+        </div>
+      `;
+      feed.prepend(novoItem);
+
       resetarCaixa();
-      alert('Venda debitada com sucesso!');
+      alert('Venda concluída e debitada com sucesso!');
     }
 
     function resetarCaixa() {
@@ -835,15 +1069,6 @@
       const saldoFormatado = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
       document.getElementById('parentBalanceDisplay').innerText = saldoFormatado;
       document.getElementById('posBalanceDisplay').innerText = saldoFormatado;
-    }
-
-    function atualizarTelas(nomeItem, valor) {
-      atualizarExibicaoSaldo();
-      const feed = document.getElementById('historyFeed');
-      const novoItem = document.createElement('div');
-      novoItem.className = 'feed-item';
-      novoItem.innerHTML = `<strong>${nomeItem} — R$ ${valor.toFixed(2).replace('.', ',')}</strong><small>Agora mesmo • Retirado no Balcão</small>`;
-      feed.prepend(novoItem);
     }
   </script>
 </body>
