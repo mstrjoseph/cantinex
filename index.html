@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cantinex — Gestão & Monitoramento</title>
+  <style>
+    :root {
+      --primary: #D9531E;
+      --primary-hover: #b84314;
+      --secondary: #E88B4C;
+      --bg: #F4F6F8;
+      --surface: #FFFFFF;
+      --text: #1F2937;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --danger: #DC2626;
+      --danger-bg: #FEE2E2;
+      --success: #16A34A;
+      --success-bg: #DCFCE7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Global */
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -1px;
+    }
+
+    .brand-text h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .brand-text span {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      background-color: var(--success-bg);
+      color: var(--success);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--success);
+      border-radius: 50%;
+    }
+
+    .btn-logout {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* Container Principal */
+    main {
+      flex: 1;
+      padding: 24px 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Tela de Login */
+    .login-container {
+      max-width: 850px;
+      margin: 40px auto;
+    }
+
+    .login-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .login-title h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .login-title p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    .login-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .auth-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .auth-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Telas dos Sistemas */
+    .view-panel {
+      display: none;
+    }
+
+    .active-view {
+      display: block;
+    }
+
+    /* Painel dos Pais */
+    .parent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    /* Carteirinha */
+    .student-badge {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+
+    .student-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #E5E7EB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .student-info h3 {
+      font-size: 1.1rem;
+    }
+
+    .student-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .balance-box {
+      background: #FFF7ED;
+      border: 1px solid #FFEDD5;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .balance-box span {
+      font-size: 0.8rem;
+      color: #9A3412;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .balance-box h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    /* Limites & Categorias */
+    .budget-bar-container {
+      margin-top: 10px;
+    }
+
+    .budget-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    .progress-track {
+      background-color: var(--border);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background-color: var(--primary);
+      height: 100%;
+      width: 58%;
+    }
+
+    .category-breakdown {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .category-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 8px 12px;
+      background: #F9FAFB;
+      border-radius: 6px;
+    }
+
+    /* Lista de Bloqueios */
+    .block-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .block-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #CBD5E1;
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--danger);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Histórico */
+    .history-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .feed-item {
+      padding: 10px 12px;
+      border-left: 3px solid var(--primary);
+      background: #F9FAFB;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+    }
+
+    .feed-item small {
+      color: var(--text-muted);
+      display: block;
+      font-size: 0.75rem;
+    }
+
+    /* PDV Cantina */
+    .pos-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+    }
+
+    .menu-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .product-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .product-card h4 {
+      font-size: 0.95rem;
+      margin: 8px 0 4px;
+    }
+
+    .product-card .price {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .order-sidebar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .blocked-warning {
+      background-color: var(--danger-bg);
+      border: 1px solid #FCA5A5;
+      color: var(--danger);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 12px;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .pos-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">CX</div>
+      <div class="brand-text">
+        <h1>Cantinex</h1>
+        <span>Gestão & Monitoramento</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Ambiente Conectado
+      </div>
+      <button class="btn-logout" id="btnLogout" style="display: none;" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. TELA DE LOGIN (Estilo Portal SATC) -->
+    <section id="viewLogin" class="view-panel active-view">
+      <div class="login-container">
+        <div class="login-title">
+          <h2>Selecione o seu Portal de Acesso</h2>
+          <p>Plataforma Integrada entre Responsáveis e Cantinas Escolares</p>
+        </div>
+
+        <div class="login-cards">
+          <!-- Login Responsáveis -->
+          <div class="auth-card">
+            <div>
+              <h3>👨‍👩‍👦 Portal do Responsável</h3>
+              <p>Acompanhe extrato, saldo, limites e bloqueio de consumo dos seus dependentes.</p>
+              <div class="form-group">
+                <label>CPF do Responsável</label>
+                <input type="text" class="form-control" value="242.925.698-35">
+              </div>
+              <div class="form-group">
+                <label>Senha de Acesso</label>
+                <input type="password" class="form-control" value="••••••••">
+              </div>
+            </div>
+            <button class="btn-primary" onclick="acessarPainel('parent')">Entrar como Responsável</button>
+          </div>
+
+          <!-- Login Cantina -->
+          <div class="auth-card">
+            <div>
+              <h3>☕ Terminal da Cantina</h3>
+              <p>Interface de caixa rápida para consulta de matrícula, débito direto e conferência.</p>
+              <div class="form-group">
+                <label>Operador / Código Caixa</label>
+                <input type="text" class="form-control" value="CAIXA-SATC-01">
+              </div>
+              <div class="form-group">
+                <label>Chave de Operação</label>
+                <input type="password" class="form-control" value="••••••">
+              </div>
+            </div>
+            <button class="btn-primary" onclick="acessarPainel('pos')">Acessar Terminal PDV</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PAINEL DO RESPONSÁVEL -->
+    <section id="viewParent" class="view-panel">
+      <div class="parent-grid">
+        <!-- Coluna Esquerda: Carteirinha & Gestão -->
+        <div class="card">
+          <div class="student-badge">
+            <div class="student-avatar">🎓</div>
+            <div class="student-info">
+              <h3>João Pedro</h3>
+              <p>Matrícula: <strong>202612113</strong></p>
+              <p>Ensino Fundamental • 8º Ano A</p>
+            </div>
+          </div>
+
+          <div class="balance-box">
+            <span>Saldo Atual Disponível</span>
+            <h2 id="parentBalanceDisplay">R$ 93,00</h2>
+          </div>
+
+          <div class="budget-bar-container">
+            <div class="budget-labels">
+              <span>Consumo no Mês: <strong>R$ 157,00</strong></span>
+              <span>Limite: R$ 250,00</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="category-breakdown">
+            <div class="category-item">
+              <span>🥐 Salgados & Lanches</span>
+              <strong>R$ 98,00</strong>
+            </div>
+            <div class="category-item">
+              <span>🧃 Sucos & Água</span>
+              <strong>R$ 38,00</strong>
+            </div>
+            <div class="category-item">
+              <span>🍫 Doces & Sobremesas</span>
+              <strong>R$ 21,00</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Central: Bloqueio Parental -->
+        <div class="card">
+          <h3>🚫 Controle & Bloqueio Parental</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+            Itens marcados são bloqueados imediatamente no PDV da cantina escolar.
+          </p>
+
+          <div class="block-list">
+            <div class="block-item">
+              <div>
+                <strong>Refrigerante (Lata)</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Bebidas com alto teor de açúcar</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="blockRefrigerante" checked onchange="toggleBlock('Refrigerante', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="block-item">
+              <div>
+                <strong>Energético 250ml</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Bebidas estimulantes</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="blockEnergetico" checked onchange="toggleBlock('Energetico', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="block-item">
+              <div>
+                <strong>Doces & Chocolates</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Guloseimas e barras açucaradas</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="blockDoces" onchange="toggleBlock('Doces', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Histórico em Tempo Real -->
+        <div class="card">
+          <h3>🔔 Extrato de Consumo</h3>
+          <div class="history-feed" id="historyFeed">
+            <div class="feed-item">
+              <strong>Coxinha de Frango — R$ 7,00</strong>
+              <small>Hoje às 10:15 • Retirado no Balcão</small>
+            </div>
+            <div class="feed-item">
+              <strong>Suco Natural Laranja — R$ 6,00</strong>
+              <small>Ontem às 15:40 • Retirado no Balcão</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. TERMINAL DA CANTINA (PDV) -->
+    <section id="viewPOS" class="view-panel">
+      <div class="pos-grid">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Catálogo de Produtos</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Aluno ativo: <strong>João Pedro (202612113)</strong></span>
+          </div>
+
+          <div class="menu-cards">
+            <div class="product-card" onclick="adicionarItem('Coxinha de Frango', 7.00, 'Salgado')">
+              <span style="font-size: 2rem;">🥐</span>
+              <h4>Coxinha de Frango</h4>
+              <span class="price">R$ 7,00</span>
+            </div>
+
+            <div class="product-card" onclick="adicionarItem('Pão de Queijo', 5.00, 'Salgado')">
+              <span style="font-size: 2rem;">🧀</span>
+              <h4>Pão de Queijo</h4>
+              <span class="price">R$ 5,00</span>
+            </div>
+
+            <div class="product-card" onclick="adicionarItem('Suco Natural Laranja', 6.00, 'Bebida')">
+              <span style="font-size: 2rem;">🧃</span>
+              <h4>Suco Natural 400ml</h4>
+              <span class="price">R$ 6,00</span>
+            </div>
+
+            <div class="product-card" onclick="adicionarItem('Refrigerante Lata', 6.50, 'Refrigerante')">
+              <span style="font-size: 2rem;">🥤</span>
+              <h4>Refrigerante Lata</h4>
+              <span class="price">R$ 6,50</span>
+            </div>
+
+            <div class="product-card" onclick="adicionarItem('Energético 250ml', 12.00, 'Energetico')">
+              <span style="font-size: 2rem;">⚡</span>
+              <h4>Energético 250ml</h4>
+              <span class="price">R$ 12,00</span>
+            </div>
+
+            <div class="product-card" onclick="adicionarItem('Barra de Chocolate', 5.00, 'Doces')">
+              <span style="font-size: 2rem;">🍫</span>
+              <h4>Barra de Chocolate</h4>
+              <span class="price">R$ 5,00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Caixa -->
+        <div class="order-sidebar">
+          <div>
+            <h3>Comanda do Caixa</h3>
+            <div style="margin-top: 14px; font-size: 0.85rem;">
+              <p>Saldo do Aluno: <strong id="posBalanceDisplay">R$ 93,00</strong></p>
+              <p style="margin-top: 4px; color: var(--text-muted);" id="cartStatus">Nenhum item selecionado</p>
+            </div>
+
+            <div class="blocked-warning" id="blockedAlert">
+              ⚠️ PRODUTO BLOQUEADO<br>
+              <span style="font-weight: 400; font-size: 0.75rem;">O responsável restringiu a compra deste produto.</span>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 12px;">
+              <span>Total:</span>
+              <span id="cartTotal">R$ 0,00</span>
+            </div>
+            <button class="btn-primary" id="btnDebitar" disabled onclick="concluirDebito()">Confirmar Débito</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Estado do Protótipo
+    let saldo = 93.00;
+    let itemSelecionado = null;
+    let bloqueios = {
+      'Refrigerante': true,
+      'Energetico': true,
+      'Doces': false
+    };
+
+    function acessarPainel(tipo) {
+      document.getElementById('viewLogin').classList.remove('active-view');
+      document.getElementById('btnLogout').style.display = 'block';
+
+      if (tipo === 'parent') {
+        document.getElementById('viewParent').classList.add('active-view');
+      } else {
+        document.getElementById('viewPOS').classList.add('active-view');
+      }
+    }
+
+    function logout() {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active-view'));
+      document.getElementById('viewLogin').classList.add('active-view');
+      document.getElementById('btnLogout').style.display = 'none';
+      resetarCaixa();
+    }
+
+    function toggleBlock(categoria, status) {
+      bloqueios[categoria] = status;
+    }
+
+    function adicionarItem(nome, preco, categoria) {
+      const alerta = document.getElementById('blockedAlert');
+      const btnDebitar = document.getElementById('btnDebitar');
+
+      // Checa se está bloqueado pelo responsável
+      if (bloqueios[categoria]) {
+        alerta.style.display = 'block';
+        alerta.innerHTML = `⚠️ VENDA RECUSADA<br><span style="font-weight: 400; font-size: 0.75rem;">"${nome}" está bloqueado pelo responsável.</span>`;
+        itemSelecionado = null;
+        document.getElementById('cartStatus').innerText = 'Item não autorizado';
+        document.getElementById('cartTotal').innerText = 'R$ 0,00';
+        btnDebitar.disabled = true;
+        return;
+      }
+
+      alerta.style.display = 'none';
+      itemSelecionado = { nome, preco };
+      document.getElementById('cartStatus').innerText = `${nome} selecionado`;
+      document.getElementById('cartTotal').innerText = `R$ ${preco.toFixed(2).replace('.', ',')}`;
+      btnDebitar.disabled = false;
+    }
+
+    function concluirDebito() {
+      if (!itemSelecionado) return;
+
+      if (saldo < itemSelecionado.preco) {
+        alert('Saldo insuficiente para esta compra.');
+        return;
+      }
+
+      saldo -= itemSelecionado.preco;
+      atualizarTelas(itemSelecionado.nome, itemSelecionado.preco);
+      resetarCaixa();
+      alert('Venda debitada com sucesso!');
+    }
+
+    function resetarCaixa() {
+      itemSelecionado = null;
+      document.getElementById('cartStatus').innerText = 'Nenhum item selecionado';
+      document.getElementById('cartTotal').innerText = 'R$ 0,00';
+      document.getElementById('btnDebitar').disabled = true;
+      document.getElementById('blockedAlert').style.display = 'none';
+    }
+
+    function atualizarTelas(nomeItem, valor) {
+      const saldoFormatado = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
+      document.getElementById('parentBalanceDisplay').innerText = saldoFormatado;
+      document.getElementById('posBalanceDisplay').innerText = saldoFormatado;
+
+      // Adiciona no extrato do responsável
+      const feed = document.getElementById('historyFeed');
+      const novoItem = document.createElement('div');
+      novoItem.className = 'feed-item';
+      novoItem.innerHTML = `<strong>${nomeItem} — R$ ${valor.toFixed(2).replace('.', ',')}</strong><small>Agora mesmo • Retirado no Balcão</small>`;
+      feed.prepend(novoItem);
+    }
+  </script>
+</body>
+</html>
