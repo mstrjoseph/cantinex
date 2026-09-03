@@ -35,7 +35,7 @@
       flex-direction: column;
     }
 
-    /* Header Global */
+    /* Header */
     header {
       background-color: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -222,7 +222,7 @@
       background-color: var(--primary-hover);
     }
 
-    /* Telas dos Sistemas */
+    /* Telas dos Painéis */
     .view-panel {
       display: none;
     }
@@ -339,7 +339,7 @@
       border-radius: 6px;
     }
 
-    /* Lista de Bloqueios */
+    /* Bloqueios */
     .block-list {
       display: flex;
       flex-direction: column;
@@ -512,7 +512,7 @@
   </header>
 
   <main>
-    <!-- 1. TELA DE LOGIN (Estilo Portal SATC) -->
+    <!-- 1. TELA DE LOGIN -->
     <section id="viewLogin" class="view-panel active-view">
       <div class="login-container">
         <div class="login-title">
@@ -527,12 +527,12 @@
               <h3>👨‍👩‍👦 Portal do Responsável</h3>
               <p>Acompanhe extrato, saldo, limites e bloqueio de consumo dos seus dependentes.</p>
               <div class="form-group">
-                <label>CPF do Responsável</label>
-                <input type="text" class="form-control" value="242.925.698-35">
+                <label>CPF ou Identificador do Responsável</label>
+                <input type="text" id="parentCpfInput" class="form-control" placeholder="Digite seu CPF">
               </div>
               <div class="form-group">
                 <label>Senha de Acesso</label>
-                <input type="password" class="form-control" value="••••••••">
+                <input type="password" id="parentPassInput" class="form-control" placeholder="Digite sua senha">
               </div>
             </div>
             <button class="btn-primary" onclick="acessarPainel('parent')">Entrar como Responsável</button>
@@ -545,11 +545,11 @@
               <p>Interface de caixa rápida para consulta de matrícula, débito direto e conferência.</p>
               <div class="form-group">
                 <label>Operador / Código Caixa</label>
-                <input type="text" class="form-control" value="CAIXA-SATC-01">
+                <input type="text" id="posCodeInput" class="form-control" placeholder="Ex: CAIXA-01">
               </div>
               <div class="form-group">
                 <label>Chave de Operação</label>
-                <input type="password" class="form-control" value="••••••">
+                <input type="password" id="posPassInput" class="form-control" placeholder="Chave de segurança">
               </div>
             </div>
             <button class="btn-primary" onclick="acessarPainel('pos')">Acessar Terminal PDV</button>
@@ -561,7 +561,7 @@
     <!-- 2. PAINEL DO RESPONSÁVEL -->
     <section id="viewParent" class="view-panel">
       <div class="parent-grid">
-        <!-- Coluna Esquerda: Carteirinha & Gestão -->
+        <!-- Coluna Esquerda: Carteirinha -->
         <div class="card">
           <div class="student-badge">
             <div class="student-avatar">🎓</div>
@@ -569,6 +569,7 @@
               <h3>João Pedro</h3>
               <p>Matrícula: <strong>202612113</strong></p>
               <p>Ensino Fundamental • 8º Ano A</p>
+              <p id="loggedParentBadge" style="margin-top: 4px; font-size: 0.75rem; color: var(--primary);"></p>
             </div>
           </div>
 
@@ -646,7 +647,7 @@
           </div>
         </div>
 
-        <!-- Coluna Direita: Histórico em Tempo Real -->
+        <!-- Coluna Direita: Histórico -->
         <div class="card">
           <h3>🔔 Extrato de Consumo</h3>
           <div class="history-feed" id="historyFeed">
@@ -669,7 +670,7 @@
         <div class="card">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <h3>Catálogo de Produtos</h3>
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Aluno ativo: <strong>João Pedro (202612113)</strong></span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Terminal: <strong id="loggedPosBadge">Balcão</strong></span>
           </div>
 
           <div class="menu-cards">
@@ -716,7 +717,8 @@
           <div>
             <h3>Comanda do Caixa</h3>
             <div style="margin-top: 14px; font-size: 0.85rem;">
-              <p>Saldo do Aluno: <strong id="posBalanceDisplay">R$ 93,00</strong></p>
+              <p>Aluno: <strong>João Pedro (202612113)</strong></p>
+              <p style="margin-top: 4px;">Saldo: <strong id="posBalanceDisplay">R$ 93,00</strong></p>
               <p style="margin-top: 4px; color: var(--text-muted);" id="cartStatus">Nenhum item selecionado</p>
             </div>
 
@@ -739,22 +741,36 @@
   </main>
 
   <script>
-    // Estado do Protótipo
-    let saldo = 93.00;
+    // Recupera dados gravados ou usa o padrão
+    let saldo = parseFloat(localStorage.getItem('cantinex_saldo')) || 93.00;
     let itemSelecionado = null;
-    let bloqueios = {
+    let bloqueios = JSON.parse(localStorage.getItem('cantinex_bloqueios')) || {
       'Refrigerante': true,
       'Energetico': true,
       'Doces': false
     };
+
+    // Aplica estado dos switches ao carregar
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('blockRefrigerante').checked = bloqueios['Refrigerante'];
+      document.getElementById('blockEnergetico').checked = bloqueios['Energetico'];
+      document.getElementById('blockDoces').checked = bloqueios['Doces'];
+      atualizarExibicaoSaldo();
+    });
 
     function acessarPainel(tipo) {
       document.getElementById('viewLogin').classList.remove('active-view');
       document.getElementById('btnLogout').style.display = 'block';
 
       if (tipo === 'parent') {
+        const cpf = document.getElementById('parentCpfInput').value.trim() || 'Responsável Conectado';
+        localStorage.setItem('cantinex_parent_user', cpf);
+        document.getElementById('loggedParentBadge').innerText = `Responsável: ${cpf}`;
         document.getElementById('viewParent').classList.add('active-view');
       } else {
+        const caixa = document.getElementById('posCodeInput').value.trim() || 'Balcão 01';
+        localStorage.setItem('cantinex_pos_user', caixa);
+        document.getElementById('loggedPosBadge').innerText = caixa;
         document.getElementById('viewPOS').classList.add('active-view');
       }
     }
@@ -768,13 +784,13 @@
 
     function toggleBlock(categoria, status) {
       bloqueios[categoria] = status;
+      localStorage.setItem('cantinex_bloqueios', JSON.stringify(bloqueios));
     }
 
     function adicionarItem(nome, preco, categoria) {
       const alerta = document.getElementById('blockedAlert');
       const btnDebitar = document.getElementById('btnDebitar');
 
-      // Checa se está bloqueado pelo responsável
       if (bloqueios[categoria]) {
         alerta.style.display = 'block';
         alerta.innerHTML = `⚠️ VENDA RECUSADA<br><span style="font-weight: 400; font-size: 0.75rem;">"${nome}" está bloqueado pelo responsável.</span>`;
@@ -801,6 +817,7 @@
       }
 
       saldo -= itemSelecionado.preco;
+      localStorage.setItem('cantinex_saldo', saldo);
       atualizarTelas(itemSelecionado.nome, itemSelecionado.preco);
       resetarCaixa();
       alert('Venda debitada com sucesso!');
@@ -814,12 +831,14 @@
       document.getElementById('blockedAlert').style.display = 'none';
     }
 
-    function atualizarTelas(nomeItem, valor) {
+    function atualizarExibicaoSaldo() {
       const saldoFormatado = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
       document.getElementById('parentBalanceDisplay').innerText = saldoFormatado;
       document.getElementById('posBalanceDisplay').innerText = saldoFormatado;
+    }
 
-      // Adiciona no extrato do responsável
+    function atualizarTelas(nomeItem, valor) {
+      atualizarExibicaoSaldo();
       const feed = document.getElementById('historyFeed');
       const novoItem = document.createElement('div');
       novoItem.className = 'feed-item';
